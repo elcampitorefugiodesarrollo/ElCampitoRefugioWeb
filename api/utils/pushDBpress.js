@@ -1,4 +1,4 @@
-const linkPreviewGenerator = require("link-preview-generator");
+// const linkPreviewGenerator = require("link-preview-generator");
 const { pressModel } = require("../models/index"); 
 const info = require("./prensa5.json"); 
 
@@ -15,7 +15,8 @@ const pushDBpress = () =>{
             let previewData = {}; 
         
             if (link) {
-                previewData = await linkPreviewGenerator(link) || {} ;
+                // previewData = await linkPreviewGenerator(link) || {} ;
+                console.log("link-preview-generator eliminado")
             };        
         
             const press = await pressModel.create({

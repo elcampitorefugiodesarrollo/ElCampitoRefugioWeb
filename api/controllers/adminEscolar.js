@@ -1,4 +1,4 @@
-const linkPreviewGenerator = require("link-preview-generator");
+// const linkPreviewGenerator = require("link-preview-generator");
 const { escolarModel } = require("../models");
 
 const adminEscolar = async (req, res) => {
@@ -97,7 +97,8 @@ const adminCreateEscolar = async (req, res) => {
     let previewData = {};
 
     if (link) {
-      previewData = await linkPreviewGenerator(link);
+      // previewData = await linkPreviewGenerator(link);
+      console.log("link-preview-generator eliminado")
     }
 
     // console.log({

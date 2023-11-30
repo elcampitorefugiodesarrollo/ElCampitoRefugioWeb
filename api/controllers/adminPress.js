@@ -1,4 +1,4 @@
-const linkPreviewGenerator = require("link-preview-generator");
+// const linkPreviewGenerator = require("link-preview-generator");
 const { pressModel } = require("../models");
 
 const adminPress = async (req, res) => {
@@ -99,7 +99,8 @@ const adminCreatePress = async (req, res) => {
     let previewData = {};
 
     if (link) {
-      previewData = await linkPreviewGenerator(link);
+      // previewData = await linkPreviewGenerator(link);
+      console.log("link-preview-generator eliminado")
     }
      // console.log(typeof previewData);
 
