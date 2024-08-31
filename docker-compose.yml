@@ -1,0 +1,103 @@
+networks:
+  perritos:
+volumes:
+  mongodb-data:
+x-common-variables:
+  DB_USER: &db_user eluser
+  DB_PASSWORD: &db_password lapassword
+  DB_NAME: &db_name unadbrecopada
+services:
+#  shell:
+#    image: ubuntu:noble
+#    environment:
+#      DB_USER: *db_user
+#      DB_PASSWORD: *db_password
+#      DB_NAME: *db_name
+#    command:
+#      - bash
+#      - "-c"
+#      - 'apt update;
+#       apt install -y wget gnupg;
+#       wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | tee /etc/apt/trusted.gpg.d/server-7.0.asc;
+#       echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list;
+#       apt update;
+#       apt install -y mongodb-mongosh;
+#       sleep infinity
+       #echo "Creating user ${DB_USER} and database ${DB_NAME}";
+       #echo "db.createUser({user: "\"$DB_USER\"", pwd: "\"$DB_PASSWORD\"", roles: [{role: "\"readWrite\"", db: "\"$DB_NAME\""}]})" | mongosh --username $DB_USER --password $DB_PASSWORD --host mongo;
+#       sleep infinity'
+#      - "&"
+#    depends_on:
+#      - mongo
+#    networks:
+#      - perritos
+  mongodb:
+    container_name: mongo
+    image: registry-1.docker.io/library/mongo:7.0.14
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: *db_name
+      MONGO_INITDB_ROOT_USERNAME: *db_user
+      MONGO_INITDB_ROOT_PASSWORD: *db_password
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - perritos
+  mongodb-express:
+    image: registry-1.docker.io/library/mongo-express:1.0.2
+    restart: always
+    ports:
+      - 8081:8081
+    #command:
+    #  - bash
+    #  - -c
+    #  - "export ME_CONFIG_MONGODB_URL=mongodb://$ME_CONFIG_MONGODB_ADMINUSERNAME:$ME_CONFIG_MONGODB_ADMINPASSWORD@mongodb:27017/;\
+    #     /sbin/tini -- /docker-entrypoint.sh
+    #    "
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: *db_user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: *db_password
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: true
+    depends_on:
+      - mongodb
+    networks:
+      - perritos
+  frontend:
+    build:
+      context: ./client/
+    ports:
+      - 80:80
+    networks:
+      - perritos
+  backend:
+    build:
+      context: ./api/
+    #command: 
+    #  - sleep
+    #  - "300"
+    environment:
+      BACK: 3000
+      ACCESS_TOKEN: alguntoken
+      DB_HOSTNAME: mongo
+      USER_DB: *db_user
+      PASS_DB: *db_password
+      NAME_DB: *db_name
+      PAYPAL_API_CLIENT: uncliente
+      PAYPAL_API_SECRET: unsecretoquenodeberiaestaraca
+      PAYPAL_API: una_api
+      PAYPAL_BRAND: no_se_que_es_esto
+      TOKEN_SECRET: untoken
+      GMAIL_USER: unuser
+      GMAIL_PASSWORD: unapassword
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    networks:
+      - perritos
+#mongosh --authenticationDatabase admin --username root --password example
+#db.createUser({user: "local_user", pwd: "unapwd", roles: [{role: "readWrite", db: "test"}]})
