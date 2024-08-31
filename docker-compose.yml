@@ -5,7 +5,7 @@ volumes:
 x-common-variables:
   DB_USER: &db_user eluser
   DB_PASSWORD: &db_password lapassword
-  DB_NAME: &db_name unadbrecopada
+  DB_NAME: &db_name test
 services:
 #  shell:
 #    image: ubuntu:noble
@@ -82,7 +82,7 @@ services:
     environment:
       BACK: 3000
       ACCESS_TOKEN: alguntoken
-      DB_HOSTNAME: mongo
+      DB_HOSTNAME: mongodb
       USER_DB: *db_user
       PASS_DB: *db_password
       NAME_DB: *db_name
@@ -99,5 +99,4 @@ services:
       - mongodb
     networks:
       - perritos
-#mongosh --authenticationDatabase admin --username root --password example
-#db.createUser({user: "local_user", pwd: "unapwd", roles: [{role: "readWrite", db: "test"}]})
+

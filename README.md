@@ -199,3 +199,15 @@ Pass: admin123
 <img height="400" src="https://res.cloudinary.com/dakezkhho/image/upload/v1671750561/refugio/readme/adminUser_ywlyfk.jpg" />
 
 ## Rutas del Backend: https://documenter.getpostman.com/view/20469022/2s8YzP14Vm
+
+
+# Ambiente de pruebas con docker compose
+- Correr `docker compose up`
+- Iniciar un shell en el container de mongodb con `docker exec -it mongo bash`
+- Iniciar un shell de mongo con `mongosh --authenticationDatabase admin --username $MONGO_INITDB_ROOT_USERNAME --password $MONGO_INITDB_ROOT_PASSWORD`
+- Crear los accessos requeridos con `db.createUser({user: "eluser", pwd: "lapassword", roles: [{role: "readWrite", db: "test"}]})`
+- Validar que el output es `{ ok: 1 }`
+- Salir del shell de mongo con `exit`
+- Salir del shell del contenedor de mongo con `exit` (si, nuevamente)
+- reiniciar el backend con `docker compose up -d`
+- Validar que el backend funciona inspeccionando sus logs con `docker logs elcampitorefugioweb-backend-1`
